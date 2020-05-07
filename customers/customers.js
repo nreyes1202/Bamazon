@@ -3,13 +3,13 @@ const mysql = require("mysql")
 require("console.table")
 
 const main = () => {
-    const database = connectToDB()
-    let inventory = loadProducts(database)
-    askCustomerForItem(inventory)
-
+    // const database = connectToDB()
+    // let inventory = loadProducts(database)
+    // askCustomerForItem(inventory)
+  loadProducts()
 }
 
-const connectToDB = () => {
+// const connectToDB = () => {
     const connection = mysql.createConnection({
         host: 'localhost',
         user: 'root',
@@ -19,33 +19,37 @@ const connectToDB = () => {
       connection.connect((err) => {
         if (err) throw err;
         console.log('Connected!');
-        loadProducts()
+        main()
     
       });
-      return connection
-}
+//       return connection
+// }
 
 //   function loadProducts(){
 
 //   }
   const loadProducts = db => {
-    db.query("SELECT * FROM products", (err, res) => {
+    connection.query("SELECT * FROM products", (err, res) => {
       if (err) throw err
       console.table(res)
+      askCustomerForItem()
     })
-
-    return res
   }
 
   const askCustomerForItem = items => {
     // The first should ask them the ID of the product they would like to buy.
-    inquirer.prompt(
+    inquirer.prompt({
         //TO DO: Look up inquirer.promp documentation.
         //Validate: val => //logic to validate !isNaN
-    ).then(val => {
+      type: "input",
+      name: "id",
+      message: "What item would you like to purchase?"
+
+    }).then(val => {
         //TO DO: Check if value exists.
         // Check if there is more than 0 quantity.
         //TO DO: return the product for next function to use.
+        console.log(val)
     }) 
   }
 
@@ -72,7 +76,5 @@ const connectToDB = () => {
   const leaveStore = () => {
 
   }
-
-  main()
 
   //Manager folder -> add items to inventory
