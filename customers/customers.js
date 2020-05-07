@@ -60,6 +60,8 @@ const askCustomerForItem = items => {
       console.log(stockQuantity)
       if (userQuantity <= stockQuantity) {
         console.log("We have enough in stock!")
+        var newQuantity = stockQuantity - userQuantity
+        customerCheckoutCart(val.id, newQuantity)
       }
       else {
         console.log("Insufficient quantity!")
@@ -71,18 +73,28 @@ const askCustomerForItem = items => {
 }
 
 
-const isItemAvailable = (itemCustomerChose, inventory) => {
-  // Once the customer has placed the order, 
-  // your application should check if your store has enough of the product to meet the customer's request.
-  // If not, the app should log a phrase like `Insufficient quantity!`, and then prevent the order from going through.
-  //TO DO: return true or false.
-}
+// const isItemAvailable = (itemCustomerChose, inventory) => {
+//   // Once the customer has placed the order, 
+//   // your application should check if your store has enough of the product to meet the customer's request.
+//   // If not, the app should log a phrase like `Insufficient quantity!`, and then prevent the order from going through.
+// }
 
-const customerCheckoutCart = (itemCustomerWillBuy, quantity) => {
+const customerCheckoutCart = (id, quantity) => {
   //     However, if your store _does_ have enough of the product, you should fulfill the customer's order.
   //    * This means updating the SQL database to reflect the remaining quantity.
   //    * Once the update goes through, show the customer the total cost of their purchase.
-  //
+  console.log(id, quantity)
+  connection.query("UPDATE products SET ? WHERE ?", [
+    {stock_quantity: quantity},
+    {item_id: id}
+  ],
+    function (error) {
+      if (error) throw err;
+      console.log("Order placed successfully!");
+      
+      main();
+    }
+  )
 }
 
 const leaveStore = () => {
