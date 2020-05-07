@@ -29,33 +29,47 @@ const loadProducts = db => {
 
 const askCustomerForItem = items => {
   // The first should ask them the ID of the product they would like to buy.
-  inquirer.prompt({
+  // The second message should ask how many units of the product they would like to buy.
+  inquirer.prompt([{
     //Validate: val => //logic to validate !isNaN
     type: "input",
     name: "id",
     message: "What item would you like to purchase?",
-    validate: function(value) {
-      if(!isNaN(value)) {
+    validate: function (value) {
+      if (!isNaN(value)) {
         return true
       }
       return "Sorry! Not valid!"
     }
-
-  }).then(val => {
-    //TO DO: Check if value exists.
-    // Check if there is more than 0 quantity.
+  },
+  {
+    type: "input",
+    name: "quantity",
+    message: "How many would you like to purchase?",
+  }
+  ]).then(val => {
     //TO DO: return the product for next function to use.
-
-
-    console.log(val)
+    const userQuantity = val.quantity
+    //retrieving data from database by id
+    connection.query("SELECT * FROM products WHERE item_id =" + val.id, (err, res) => {
+      if (err) throw err
+      // console.table(res)
+      // TO DO: check to see if there is enough in stock from res
+      const stockQuantity = res[0].stock_quantity
+      console.log(res)
+      console.log(stockQuantity)
+      if (userQuantity <= stockQuantity) {
+        console.log("We have enough in stock!")
+      }
+      else {
+        console.log("Insufficient quantity!")
+        main()
+      }
+    })
   })
+  // end of function
 }
 
-const getCustomerQuantity = item => {
-  // The second message should ask how many units of the product they would like to buy.
-  //TO DO: write similar logic to inquirer.prompt but for quantity instead of item.
-  //Return the item and quantity as a single array.
-}
 
 const isItemAvailable = (itemCustomerChose, inventory) => {
   // Once the customer has placed the order, 
