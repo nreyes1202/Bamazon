@@ -1,4 +1,4 @@
-//Requiring inquirer, Mysql and console.table to display "store."
+//Dependencies and console.table to display "store."
 
 const inquirer = require("inquirer")
 const mysql = require("mysql")
@@ -22,16 +22,16 @@ connection.connect((err) => {
 //Main function to display all products on Bamazon.
 
 const main = () => {
-  loadProducts()
+  loadProducts(connection)
 }
 
 //Creating this function to load all products from database when node is run.
 
-const loadProducts = db => {
+const loadProducts = connection => {
   connection.query("SELECT * FROM products", (err, res) => {
     if (err) throw err
     console.table(res)
-    askCustomerForItem()
+    askCustomerForItem(res)
   })
 }
 
@@ -96,16 +96,16 @@ const customerCheckoutCart = (id, quantity, price) => {
       if (error) throw err;
       console.log("Order placed successfully!");
       console.log("The total price is $" + price)
+
+      main(); 
       
-
-
-      main(); //instead of callng main, do another inquirer and ask "would you like to purchase anoter item"
+      //Future TO DO: instead of callng main, do another inquirer and ask "would you like to purchase another item"
       //if they want to leave, then execute leavestore
       //
     }
   )
 }
+//Future TO DO: finish up with connection.end within leaveStore function
 
-const leaveStore = () => {
-  // look up connection.end
-}
+// const leaveStore = () => {
+// }

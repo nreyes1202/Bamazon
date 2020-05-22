@@ -34,25 +34,13 @@ const loadProducts = connection => {
   })
 }
 
-  // it should list all items with an inventory count lower than five.
-
+  // List of all items with an inventory count lower than five.
 
 const lowInventory = items => {
   inquirer.prompt([{
     type: "input",
     name: "id",
-    message: "What item would you like to purchase?",
-    validate: function (value) {
-      if (!isNaN(value)) {
-        return true
-      }
-      return "Sorry! Not valid!"
-    }
-  },
-  {
-    type: "input",
-    name: "quantity",
-    message: "How many would you like to purchase?",
+    message: "",
   }
   ]).then(val => {
     //Getting quantity from array.
@@ -83,3 +71,5 @@ const lowInventory = items => {
   // * If a manager selects `Add to Inventory`, your app should display a prompt that will let the manager "add more" of any item currently in the store.
 
   // * If a manager selects `Add New Product`, it should allow the manager to add a completely new product to the store.
+
+
